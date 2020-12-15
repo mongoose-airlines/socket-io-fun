@@ -17,7 +17,7 @@ io.on('connection', (socket) => {
     messages.push({user: "System", message: `${userCount} users are connected`})
     io.sockets.emit('new-message', {messages})
   })
-  
+
   // This is where all of our server-side socket.io functionality will exist.  
   console.log("The server is running.")
   
@@ -28,7 +28,9 @@ io.on('connection', (socket) => {
     io.sockets.emit('new-message', {messages})
   })
 
-
+  socket.on('typing', (userName) => {
+    socket.broadcast.emit("user-typing", {user: userName.user})
+  })
 })
 
 

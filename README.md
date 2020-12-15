@@ -228,7 +228,7 @@ The callback function should clear the contents of `messagesDiv` then loop over 
 ```js
 socket.on('new-message', (data) => {
   messagesDiv.innerHTML = ""
-  data.messages.forEach(m => {
+  data.messages.reverse().forEach(m => {
     const newMessage = document.createElement("div")
     newMessage.innerHTML = `<p><strong>${m.user}</strong>: ${m.message}</p>`
     messagesDiv.appendChild(newMessage)
@@ -270,8 +270,75 @@ io.on('connection', (socket) => {
 }
 ```
 
-### Stretch goals:
-- "... is typing a message"
+<br>
+
+## Step 22: Display a message showing when a user is typing a message. Add a `<div>` with an id of 'isTyping' below the message button in `index.ejs`. Add a cached element reference for it in `chat.js`.
+
+```html
+<div id="isTyping"></div>
+```
+
+```js
+const isTyping = document.getElementById("isTyping")
+```
+
+<br>
+
+## Step 23: Expand the event listener for the `messageInput` element to include an else statement to handle emitting an event while someone is typing in the `<input>`.
+
+```js
+function sendMessage(e) {
+  if(e.key === "Enter" || e.type === "click") {
+    // Emit 'message' to the server (optionally passing data)
+    socket.emit('message', {message: messageInput.value, user: userName.value})
+    messageInput.value = ""
+    // Add this code to handle '... is typing'
+  } else {
+    socket.emit('typing', {user: userName.value})
+  }
+}
+```
+
+<br>
+
+## Step 24: Add a listener on the server (`io.js`) for the 'typing' event.  
+
+When detected, it should emit an event to all sockets except for the one that triggered the event. `socket.broadcast.emit`, to the rescue!!!
+
+```js
+socket.on('typing', (userName) => {
+  socket.broadcast.emit("user-typing", {user: userName.user})
+})
+```
+
+<br>
+
+## Step 25: Add a listener to the client-side `chat.js` to handle displaying a message whenever the 'user-typing' event is detected.
+
+```js
+socket.on('user-typing', (userName) => {
+  isTyping.innerText = `${userName.user} is typing...`
+})
+```
+
+## Step 26: Add one line of code to clear the '... is typing...' message whenever a message is sent.
+
+```js
+socket.on('new-message', (data) => {
+  messagesDiv.innerHTML = ""
+  data.messages.reverse().forEach(m => {
+    const newMessage = document.createElement("div")
+    newMessage.innerHTML = `<p><strong>${m.user}</strong>: ${m.message}</p>`
+    messagesDiv.appendChild(newMessage)
+  });
+  // Add this line of code to reset the '... is typing ...' message
+  isTyping.innerText = ""
+})
+```
+
+## Stretch goals:
+- oAuth instead of chat name `<input>`
+- list current client user names
 - drawing with colors
 - sounds on entry/exit/message
 - namespaces
