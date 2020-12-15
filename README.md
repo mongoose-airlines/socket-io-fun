@@ -339,6 +339,7 @@ socket.on('new-message', (data) => {
 ## Stretch goals:
 - oAuth instead of chat name `<input>`
 - list current client user names
+- handle message for multiple users typing simultaneously
 - drawing with colors
 - sounds on entry/exit/message
 - namespaces
