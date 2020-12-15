@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+    <script defer src="/javascripts/chat.js"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <input type="text" id="userName" placeholder="Enter name:"><br><br><br>
+    <input type="text" id="messageInput" placeholder="Type a message!">
+    <button id='messageButton'>Message Button</button>
+    <div id="messages"></div>
+  </body>
+</html>
