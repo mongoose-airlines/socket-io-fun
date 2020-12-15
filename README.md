@@ -343,6 +343,6 @@ socket.on('new-message', (data) => {
 - drawing with colors
 - sounds on entry/exit/message
 - namespaces
-- database connection
+- database connection (display message timestamps also)
 - deployment
 - styling (anything...)
